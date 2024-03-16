@@ -1,83 +1,111 @@
 #include <iostream>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <cstdlib>
 
+extern "C" {
 
-void render_frame(float A, float B, float C);
-int main() {
-  render_frame(6.28f / 4.0f, 0.0f, 0.0f);
-  return 0;
-}
+  char* render_frame(float A, float B, float C, float screen_width, float screen_height);
 
-void render_frame(float A, float B, float C) {
-  float screen_width = 80;
-  float screen_height = 22;
-  float theta_spacing = 0.07;
-  float phi_spacing = 0.02;
-  float R1 = 1.0f;
-  float R2 = 2.0f;
-  float K2 = 5.0f;
-  float K1 = 30.0f;
-
-  char output[(int) screen_width * (int) screen_height];
-  float zbuffer[(int) screen_width * (int) screen_height];
-
-  for (int k=0; k < (int) screen_width * (int) screen_height; k++) {
-    output[k] = ' ';
-    zbuffer[k] = 0;
-  }
-
-  for (float theta=0; theta < 2 * M_PI; theta += theta_spacing) {
-    for (float phi=0; phi < 2 * M_PI; phi += phi_spacing) {
-
-      glm::vec3 circle = glm::vec3(R2 + R1 * cos(theta), R1 * sin(theta), 0.0f);
-      glm::mat3 donutRotate = glm::transpose(glm::mat3(
-        cos(phi), 0.0f, sin(phi),
-        0.0f, 1.0f, 0.0f,
-        -sin(phi), 0.0f, cos(phi)
-      ));
-      glm::mat3 rotateXAxis = glm::transpose(glm::mat3(
-        1.0f, 0.0f, 0.0f,
-        0.0f, cos(A), -sin(A),
-        0.0f, sin(A), cos(A)
-      ));
-      glm::mat3 rotateYAxis = glm::transpose(glm::mat3(
-        cos(B), 0.0f, sin(B),
-        0.0f, 1.0f, 0.0f,
-        -sin(B), 0.0f, cos(B)
-      ));
-      glm::mat3 rotateZxis = glm::transpose(glm::mat3(
-        cos(C), -sin(C), 0.0f,
-        sin(C), cos(C), 0.0f,
-        0.0f, 0.0f, 1.0f
-      ));
-
-      glm::vec3 position = circle * donutRotate * rotateXAxis * rotateYAxis * rotateZxis;
-
-      float ooz = 1.0f/(position.z + K2);
-      int xp = (int) (screen_width/2 + K1 * ooz * position.x);
-      int yp = (int) (screen_height/2 - (K1/2) * ooz * position.y);
-      int o = xp + screen_width * yp;
-
-      float L = glm::dot(
-        glm::vec3(cos(theta), sin(theta), 0.0f) * donutRotate * rotateXAxis * rotateYAxis * rotateZxis,
-        glm::vec3(0.0f, 1.0f, -1.0f)
-      );
-      
-      if(yp<screen_height && yp>=0 && xp<screen_width && xp>=0 && ooz > zbuffer[o]) {
-        zbuffer[o] = ooz;
-        int luminance_index = L*8;
-        output[o] = ".,-~:;=!*#$@"[luminance_index > 0 ? luminance_index : 0];
+  void multiply(float* mat1, float* mat2, float* result, int rows1, int cols1, int rows2, int cols2) {
+    for (int i = 0; i < rows1; i++) {
+      for (int j = 0; j < cols2; j++) {
+        result[i * cols2 + j] = 0;
+        for (int k = 0; k < cols1; k++) {
+          result[i * cols2 + j] += mat1[i * cols1 + k] * mat2[k * cols2 + j];
+        }
       }
     }
   }
 
-  std::cout << "This is my donut" << std::endl;
-  for(int i = 0; i < (int) screen_width * (int) screen_height; i++) {
-    if (i % (int) screen_width == 0) {
-      std::cout << std::endl;
+  float dot(float* a, float* b, int length) {
+    float sum = 0;
+    for (int i = 0; i < length; i++) {
+      sum += a[i] * b[i];
     }
-    std::cout << output[i];
+    return sum;
   }
-  std::cout << std::endl;
+
+
+  int main() {
+    char* frame = render_frame(6.28f / 4.0f, .6f, 0.0f, 80.0f, 22.0f);
+    std::cout << "This is my donut" << std::endl;
+    std::cout << frame << std::endl;
+    free(frame);
+    return 0;
+  }
+
+  char* render_frame(float A, float B, float C, float screen_width, float screen_height) {
+    float theta_spacing = 0.07;
+    float phi_spacing = 0.02;
+    float R1 = 1.0f;
+    float R2 = 2.0f;
+    float K2 = 5.0f;
+    float K1 = 30.0f;
+
+    char* output = (char*) malloc(((int) screen_width + 1) * (int) screen_height * sizeof(char));
+    float* zbuffer = (float*) malloc((int) screen_width * (int) screen_height * sizeof(float));
+    // todo: use memset to set values
+
+    for (int k=0; k < (int) screen_width * (int) screen_height; k++) {
+      output[k] = ' ';
+      zbuffer[k] = 0;
+    }
+    for (int k=0; k < (int) screen_height; k++) {
+      output[k * (int) screen_width + (int) screen_width] = '\n';
+    }
+
+    float rotateXAxis[] = {
+      1.0f, 0.0f, 0.0f,
+      0.0f, cos(A), -sin(A),
+      0.0f, sin(A), cos(A),
+    };
+    float rotateYAxis[] = {
+      cos(B), 0.0f, sin(B),
+      0.0f, 1.0f, 0.0f,
+      -sin(B), 0.0f, cos(B),
+    };
+    float rotateZAxis[] = {
+      cos(C), -sin(C), 0.0f,
+      sin(C), cos(C), 0.0f,
+      0.0f, 0.0f, 1.0f
+    };
+    float tranformMatrix[3 * 3];
+    float partial[3 * 3];
+
+    multiply(rotateXAxis, rotateYAxis, partial, 3, 3, 3, 3);
+    multiply(partial, rotateZAxis, tranformMatrix, 3, 3, 3, 3);
+
+    for (float theta=0; theta < 2 * M_PI; theta += theta_spacing) {
+      for (float phi=0; phi < 2 * M_PI; phi += phi_spacing) {
+
+        float circle[] = { R2 + R1 * cos(theta), R1 * sin(theta), 0.0f };
+        float donutRotate[] = {
+          cos(phi), 0.0f, sin(phi),
+          0.0f, 1.0f, 0.0f,
+          -sin(phi), 0.0f, cos(phi)          
+        };
+        float position[3 * 1];
+        multiply(donutRotate, tranformMatrix, partial, 3, 3, 3, 3);
+        multiply(circle, partial, position, 1, 3, 3, 3);
+
+        float ooz = 1.0f/(position[2] + K2);
+        int xp = (int) (screen_width/2 + K1 * ooz * position[0]);
+        int yp = (int) (screen_height/2 - (K1/2) * ooz * position[1]);
+        int o = xp + screen_width * yp;
+
+        float normal[3];
+        float partialvec[] = { cos(theta), sin(theta), 0.0f };
+        multiply(partialvec, partial, normal, 1, 3, 3, 3);
+        float light[] = { 0.0f, 1.0f, -1.0f };
+
+        float L = dot(normal, light, 3);
+        
+        if(yp<screen_height && yp>=0 && xp<screen_width && xp>=0 && ooz > zbuffer[o]) {
+          zbuffer[o] = ooz;
+          int luminance_index = L*8;
+          output[o] = ".,-~:;=!*#$@"[luminance_index > 0 ? luminance_index : 0];
+        }
+      }
+    }
+    return output;
+  }
 }

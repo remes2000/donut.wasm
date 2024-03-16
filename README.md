@@ -1,0 +1,1 @@
+em++ --no-entry donut.cpp -I /opt/homebrew/include -o donut.wasm -s EXPORTED_FUNCTIONS="['_render_frame']"

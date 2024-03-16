@@ -1,0 +1,23 @@
+body {
+  background-color: black;
+  color: white;
+}
+
+.display {
+  display: flex;
+  justify-content: center;
+}
+
+.toolbox {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  column-gap: 25px;
+  row-gap: 10px;
+}
+
+.toolbox label {
+  white-space: nowrap;
+}
