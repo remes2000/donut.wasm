@@ -2,3 +2,4 @@
 .vscode
 donut.js
 donut.wasm
+node_modules

@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-
-char* render_frame(float A, float B, float C, float screen_width, float screen_height);
+#include <emscripten.h>
 
 void multiply(float* mat1, float* mat2, float* result, int rows1, int cols1, int rows2, int cols2) {
   for (int i = 0; i < rows1; i++) {
@@ -23,13 +22,7 @@ float dot(float* a, float* b, int length) {
   return sum;
 }
 
-int main() {
-  char* frame = render_frame(6.28f / 4.0f, 0.0f, 0.0f, 80.0f, 22.0f);
-  printf("%s", frame);
-  free(frame);
-  return 0;
-}
-
+EMSCRIPTEN_KEEPALIVE
 char* render_frame(float A, float B, float C, float screen_width, float screen_height) {
   float theta_spacing = 0.07;
   float phi_spacing = 0.02;
@@ -104,4 +97,16 @@ char* render_frame(float A, float B, float C, float screen_width, float screen_h
     }
   }
   return output;
+}
+
+EMSCRIPTEN_KEEPALIVE
+void wasmfree(void *ptr) {
+  free(ptr);
+}
+
+int main() {
+  // char* frame = render_frame(6.28f / 4.0f, 0.0f, 0.0f, 80.0f, 22.0f);
+  // printf("%s", frame);
+  // free(frame);
+  return 0;
 }
