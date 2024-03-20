@@ -32,6 +32,7 @@ body {
 }
 
 #animate,
-#lockcursor {
+#lockcursor,
+#reset {
   grid-column: span 2;
 }
