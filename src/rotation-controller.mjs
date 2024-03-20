@@ -29,11 +29,10 @@ export class RotationController {
     }
     const [lockX, lockY] = this.lockPoint;
     const [dx, dy] = [clientX - lockX, clientY - lockY];
-    const d = Math.hypot(dx, dy);
     const [currentRotateX, currentRotateY, currentRotateZ] = this.donut.rotate;
     this.donut.rotate = [
-      currentRotateX + (dy > 0 ? 1 : -1) * (d * this.rotationStep),
-      currentRotateY + (dx > 0 ? 1 : -1) * (d * this.rotationStep),
+      (currentRotateX + dy * this.rotationStep) % 6.28,
+      (currentRotateY + dx * this.rotationStep) % 6.28,
       currentRotateZ
     ];
     this.lockPoint = [clientX, clientY];

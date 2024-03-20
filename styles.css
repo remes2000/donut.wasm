@@ -8,6 +8,7 @@ body {
   height: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   user-select: none;
   background-color: black;
   color: white;
@@ -28,4 +29,9 @@ body {
 
 .toolbox label {
   white-space: nowrap;
+}
+
+#animate,
+#lockcursor {
+  grid-column: span 2;
 }
