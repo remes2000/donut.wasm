@@ -23,11 +23,9 @@ float dot(float* a, float* b, int length) {
 }
 
 EMSCRIPTEN_KEEPALIVE
-char* render_frame(float A, float B, float C, float screen_width, float screen_height) {
+char* render_frame(float A, float B, float C, float screen_width, float screen_height, float R1, float R2) {
   float theta_spacing = 0.07;
   float phi_spacing = 0.02;
-  float R1 = 1.0f;
-  float R2 = 2.0f;
   float K2 = 5.0f;
   float K1 = 30.0f;
 
@@ -105,7 +103,7 @@ void wasmfree(void *ptr) {
 }
 
 int main() {
-  // char* frame = render_frame(6.28f / 4.0f, 0.0f, 0.0f, 80.0f, 22.0f);
+  // char* frame = render_frame(6.28f / 4.0f, 0.0f, 0.0f, 80.0f, 22.0f, 1.0f, 2.0f);
   // printf("%s", frame);
   // free(frame);
   return 0;

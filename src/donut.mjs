@@ -6,6 +6,8 @@ export class Donut {
   cols = 22;
   _color = '#ffffff';
   _fontSize = 12;
+  _thickness = 1;
+  _size = 2;
   distance = 30;
 
   constructor(donutAPI) {
@@ -16,7 +18,7 @@ export class Donut {
   render() {
     const [rotateX, rotateY, rotateZ] = this._rotate;
     this.preElement.innerHTML =
-      this.donutAPI.getFrame(rotateX, rotateY, rotateZ, this.rows, this.cols);
+      this.donutAPI.getFrame(rotateX, rotateY, rotateZ, this.rows, this.cols, this._thickness, this._size);
   }
  
   set rotate(rotate) {
@@ -44,5 +46,23 @@ export class Donut {
 
   get fontSize() {
     return this._fontSize;
+  }
+
+  get thickness() {
+    return this._thickness;
+  }
+
+  set thickness(thickness) {
+    this._thickness = thickness;
+    this.render();
+  }
+
+  get size() {
+    return this._size;
+  }
+
+  set size(size) {
+    this._size = size;
+    this.render();
   }
 }

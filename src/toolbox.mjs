@@ -5,6 +5,8 @@ export class Toolbox {
   fontSizeInput = document.querySelector('#fontsize');
   fontColorInput = document.querySelector('#fontcolor');
   distanceInput = document.querySelector('#distance');
+  thicknessInput = document.querySelector('#thickness');
+  sizeInput = document.querySelector('#size');
 
   constructor(donut) {
     this.donut = donut;
@@ -13,12 +15,14 @@ export class Toolbox {
   }
 
   initView() {
-    const { rows, cols, color, fontSize, distance } = this.donut;
+    const { rows, cols, color, fontSize, distance, thickness, size } = this.donut;
     this.rowsInput.value = rows;
     this.colsInput.value = cols;
     this.fontSizeInput.value = fontSize;
     this.fontColorInput.value = color;
     this.distanceInput.value = distance;
+    this.thicknessInput.value = thickness;
+    this.sizeInput.value = size;
   }
 
   listenToEvents() {
@@ -28,6 +32,14 @@ export class Toolbox {
 
     this.fontSizeInput.addEventListener('input', ({ target: { value } }) => {
       this.donut.fontSize = value;
+    });
+
+    this.thicknessInput.addEventListener('input', ({ target: { value } }) => {
+      this.donut.thickness = value;
+    });
+
+    this.sizeInput.addEventListener('input', ({ target: { value } }) => {
+      this.donut.size = value;
     });
   }
 }

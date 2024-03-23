@@ -5,8 +5,8 @@ export class DonutApi {
     this.wasmResult = wasmResult;
   }
 
-  getFrame(rotateX, rotateY, rotateZ, rows, cols) {
-    const pointer = this.exports.render_frame(rotateX, rotateY, rotateZ, rows, cols);
+  getFrame(rotateX, rotateY, rotateZ, rows, cols, r1, r2) {
+    const pointer = this.exports.render_frame(rotateX, rotateY, rotateZ, rows, cols, r1, r2);
     
     const bytes = new Uint8Array(this.memory.buffer, pointer);
     let stringLength = 0;
