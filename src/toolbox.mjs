@@ -1,5 +1,7 @@
 export class Toolbox {
   donut;
+  rotationController;
+  lockedRotationController;
   rowsInput = document.querySelector('#rows');
   colsInput = document.querySelector('#cols');
   fontSizeInput = document.querySelector('#fontsize');
@@ -7,11 +9,15 @@ export class Toolbox {
   distanceInput = document.querySelector('#distance');
   thicknessInput = document.querySelector('#thickness');
   sizeInput = document.querySelector('#size');
+  lockCursorButton = document.querySelector('#lockcursor');
 
-  constructor(donut) {
+  constructor(donut, rotationController, lockedRotationController) {
     this.donut = donut;
+    this.rotationController = rotationController;
+    this.lockedRotationController = lockedRotationController;
     this.initView();
     this.listenToEvents();
+    this.rotationController.resume();
   }
 
   initView() {
@@ -40,6 +46,11 @@ export class Toolbox {
 
     this.sizeInput.addEventListener('input', ({ target: { value } }) => {
       this.donut.size = value;
+    });
+
+    this.lockCursorButton.addEventListener('click', () => {
+      this.rotationController.pause();
+      this.lockedRotationController.resume();
     });
   }
 }

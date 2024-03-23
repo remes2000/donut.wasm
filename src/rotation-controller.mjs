@@ -6,24 +6,29 @@ export class RotationController {
 
   constructor(donut) {
     this.donut = donut;
-    this.listenToEvents();
   }
 
-  listenToEvents() {
-    this.display.addEventListener('mousedown', this.lock.bind(this));
-    this.display.addEventListener('mouseup', this.release.bind(this));
-    this.display.addEventListener('mousemove', this.rotate.bind(this));
+  resume() {
+    this.display.addEventListener('mousedown', this.lock);
+    this.display.addEventListener('mouseup', this.release);
+    this.display.addEventListener('mousemove', this.rotate);
   }
 
-  lock({ clientX, clientY }) {
+  pause() {
+    this.display.removeEventListener('mousedown', this.lock);
+    this.display.removeEventListener('mouseup', this.release);
+    this.display.removeEventListener('mousemove', this.rotate);
+  }
+
+  lock = ({ clientX, clientY }) => {
     this.lockPoint = [clientX, clientY];
   }
 
-  release() {
+  release = () => {
     this.lockPoint = null;
   }
 
-  rotate({ clientX, clientY }) {
+  rotate = ({ clientX, clientY }) => {
     if (!this.lockPoint) {
       return;
     }
