@@ -35,6 +35,11 @@ export class Donut {
  
   set rotate(rotate) {
     this._rotate = rotate;
+    document.querySelector('#test').innerHTML = `
+      <div>X = ${this._rotate[0].toFixed(2)}</div>
+      <div>Y = ${this._rotate[1].toFixed(2)}</div>
+      <div>Z = ${this._rotate[2].toFixed(2)}</div>
+    `
     this.render();
   }
 

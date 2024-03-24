@@ -29,7 +29,7 @@ char* render_frame(float A, float B, float C, float screen_width, float screen_h
   float K2 = 5.0f;
   float K1 = 30.0f;
 
-  char* output = (char*) malloc(((int) screen_width + 1) * (int) screen_height * sizeof(char));
+  char* output = (char*) malloc(((int) screen_width * (int) screen_height + 1) * sizeof(char));
   float* zbuffer = (float*) malloc((int) screen_width * (int) screen_height * sizeof(float));
   // todo: use memset to set values
 
@@ -37,9 +37,7 @@ char* render_frame(float A, float B, float C, float screen_width, float screen_h
     output[k] = ' ';
     zbuffer[k] = 0;
   }
-  for (int k=0; k < (int) screen_height; k++) {
-    output[k * (int) screen_width + (int) screen_width] = '\n';
-  }
+  output[(int) screen_width * (int) screen_height] = '\0';
 
   float rotateXAxis[] = {
     1.0f, 0.0f, 0.0f,
@@ -103,9 +101,9 @@ void wasmfree(void *ptr) {
   free(ptr);
 }
 
-int main() {
-  // char* frame = render_frame(6.28f / 4.0f, 0.0f, 0.0f, 80.0f, 22.0f, 1.0f, 2.0f);
-  // printf("%s", frame);
-  // free(frame);
-  return 0;
-}
+// int main() {
+//   char* frame = render_frame(6.28f / 4.0f, 0.0f, 0.0f, 80.0f, 22.0f, 1.0f, 5.0f);
+//   printf("%s", frame);
+//   free(frame);
+//   return 0;
+// }
