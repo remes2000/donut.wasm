@@ -1,4 +1,4 @@
-import { EventBus, LOCKED_CURSOR_MODE_FINISHED, ENTER_LOCKED_CURSOR_MODE, ENTER_MOUSE_ROTATION_MODE, EXIT_MODE } from "./event-bus.mjs";
+import { EventBus, LOCKED_CURSOR_MODE_FINISHED, ENTER_LOCKED_CURSOR_MODE, ENTER_MOUSE_ROTATION_MODE, EXIT_MODE, ENTER_ANIMATION_MODE } from "./event-bus.mjs";
 
 export class Toolbox {
   donut;
@@ -10,6 +10,7 @@ export class Toolbox {
   thicknessInput = document.querySelector('#thickness');
   sizeInput = document.querySelector('#size');
   lockCursorButton = document.querySelector('#lockcursor');
+  animateButton = document.querySelector('#animate');
 
   constructor(donut) {
     this.donut = donut;
@@ -50,6 +51,11 @@ export class Toolbox {
     this.lockCursorButton.addEventListener('click', () => {
       EventBus.emit({ type: EXIT_MODE });
       EventBus.emit({ type: ENTER_LOCKED_CURSOR_MODE });
+    });
+
+    this.animateButton.addEventListener('click', () => {
+      EventBus.emit({ type: EXIT_MODE });
+      EventBus.emit({ type: ENTER_ANIMATION_MODE });
     });
   }
 
