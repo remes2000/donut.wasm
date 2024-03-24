@@ -1,4 +1,4 @@
-import { EventBus, LOCKED_CURSOR_MODE_FINISHED, ENTER_LOCKED_CURSOR_MODE, ENTER_MOUSE_ROTATION_MODE, EXIT_MODE, ENTER_ANIMATION_MODE } from "./event-bus.mjs";
+import { EventBus, LOCKED_CURSOR_MODE_FINISHED, ENTER_LOCKED_CURSOR_MODE, ENTER_MOUSE_ROTATION_MODE, EXIT_MODE, ENTER_ANIMATION_MODE, ANIMATION_MODE_FINISHED } from "./event-bus.mjs";
 
 export class Toolbox {
   donut;
@@ -67,7 +67,7 @@ export class Toolbox {
 
   listenToEventBus() {
     EventBus.subscribe(({ type }) => {
-      if (type === LOCKED_CURSOR_MODE_FINISHED) {
+      if (type === LOCKED_CURSOR_MODE_FINISHED || type === ANIMATION_MODE_FINISHED) {
         return EventBus.emit({ type: ENTER_MOUSE_ROTATION_MODE });
       }
     });

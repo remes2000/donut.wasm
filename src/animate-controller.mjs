@@ -1,7 +1,8 @@
-import { ENTER_ANIMATION_MODE, EXIT_MODE, EventBus } from "./event-bus.mjs";
+import { ENTER_ANIMATION_MODE, EXIT_MODE, ANIMATION_MODE_FINISHED, EventBus } from "./event-bus.mjs";
 
 export class AnimateController {
   donut;
+  display = document.querySelector('.display');
   xAxisStep = 0.04;
   zAxisStep = 0.02;
   currentIntervalRef;
@@ -27,12 +28,19 @@ export class AnimateController {
     this.currentIntervalRef = setInterval(() => {
       this.updateShape();  
     }, this.intervalRate);
+    this.display.addEventListener('mousedown', this.endAnimation);
   }
 
   pause() {
     if (this.currentIntervalRef) {
       clearInterval(this.currentIntervalRef);
     }
+    this.display.removeEventListener('mousedown', this.endAnimation);
+  }
+
+  endAnimation = () => {
+    this.pause();
+    EventBus.emit({ type: ANIMATION_MODE_FINISHED });
   }
 
   updateShape() {
