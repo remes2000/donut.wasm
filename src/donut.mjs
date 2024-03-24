@@ -20,6 +20,18 @@ export class Donut {
     this.preElement.innerHTML =
       this.donutAPI.getFrame(rotateX, rotateY, rotateZ, this.rows, this.cols, this._thickness, this._size);
   }
+
+  setDefaultState() {
+    this._rotate = [6.28 / 4, 0, 0];
+    this.rows = 80;
+    this.cols = 22;
+    this._thickness = 1;
+    this._size = 2;
+    this.distance = 30;
+    this.render();
+    this.color = '#ffffff';
+    this.fontSize = 12;
+  }
  
   set rotate(rotate) {
     this._rotate = rotate;

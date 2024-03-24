@@ -11,6 +11,7 @@ export class Toolbox {
   sizeInput = document.querySelector('#size');
   lockCursorButton = document.querySelector('#lockcursor');
   animateButton = document.querySelector('#animate');
+  resetButton = document.querySelector('#reset');
 
   constructor(donut) {
     this.donut = donut;
@@ -56,6 +57,11 @@ export class Toolbox {
     this.animateButton.addEventListener('click', () => {
       EventBus.emit({ type: EXIT_MODE });
       EventBus.emit({ type: ENTER_ANIMATION_MODE });
+    });
+
+    this.resetButton.addEventListener('click', () => {
+      this.donut.setDefaultState();
+      this.initView();
     });
   }
 
