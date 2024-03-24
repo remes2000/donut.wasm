@@ -1,4 +1,6 @@
-export class RotationController {
+import { ENTER_MOUSE_ROTATION_MODE, EXIT_MODE, EventBus } from "./event-bus.mjs";
+
+export class MouseRotationController {
   donut;
   lockPoint;
   rotationStep = 0.008;
@@ -6,6 +8,18 @@ export class RotationController {
 
   constructor(donut) {
     this.donut = donut;
+    this.listenToEventBus();
+  }
+
+  listenToEventBus() {
+    EventBus.subscribe(({ type }) => {
+      if (type === ENTER_MOUSE_ROTATION_MODE) {
+        return this.resume();
+      }
+      if (type === EXIT_MODE) {
+        return this.pause();
+      }
+    });
   }
 
   resume() {

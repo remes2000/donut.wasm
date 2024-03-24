@@ -1,7 +1,7 @@
+import { EventBus, LOCKED_CURSOR_MODE_FINISHED, ENTER_LOCKED_CURSOR_MODE, ENTER_MOUSE_ROTATION_MODE, EXIT_MODE } from "./event-bus.mjs";
+
 export class Toolbox {
   donut;
-  rotationController;
-  lockedRotationController;
   rowsInput = document.querySelector('#rows');
   colsInput = document.querySelector('#cols');
   fontSizeInput = document.querySelector('#fontsize');
@@ -11,13 +11,12 @@ export class Toolbox {
   sizeInput = document.querySelector('#size');
   lockCursorButton = document.querySelector('#lockcursor');
 
-  constructor(donut, rotationController, lockedRotationController) {
+  constructor(donut) {
     this.donut = donut;
-    this.rotationController = rotationController;
-    this.lockedRotationController = lockedRotationController;
     this.initView();
-    this.listenToEvents();
-    this.rotationController.resume();
+    this.listenToDomEvents();
+    this.listenToEventBus();
+    EventBus.emit({ type: ENTER_MOUSE_ROTATION_MODE });
   }
 
   initView() {
@@ -31,7 +30,7 @@ export class Toolbox {
     this.sizeInput.value = size;
   }
 
-  listenToEvents() {
+  listenToDomEvents() {
     this.fontColorInput.addEventListener('input', ({ target: { value } }) => {
       this.donut.color = value;
     });
@@ -49,8 +48,16 @@ export class Toolbox {
     });
 
     this.lockCursorButton.addEventListener('click', () => {
-      this.rotationController.pause();
-      this.lockedRotationController.resume();
+      EventBus.emit({ type: EXIT_MODE });
+      EventBus.emit({ type: ENTER_LOCKED_CURSOR_MODE });
+    });
+  }
+
+  listenToEventBus() {
+    EventBus.subscribe(({ type }) => {
+      if (type === LOCKED_CURSOR_MODE_FINISHED) {
+        return EventBus.emit({ type: ENTER_MOUSE_ROTATION_MODE });
+      }
     });
   }
 }

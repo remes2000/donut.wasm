@@ -1,7 +1,7 @@
 import { DonutApi } from './donut-api.mjs';
 import { Donut } from './donut.mjs';
 import { Toolbox } from './toolbox.mjs';
-import { RotationController } from './rotation-controller.mjs';
+import { MouseRotationController } from './mouse-rotation-controller.mjs';
 import { LockedRotationController } from './locked-rotation-controller.mjs';
 
 let memory = new WebAssembly.Memory({
@@ -18,8 +18,7 @@ WebAssembly.instantiateStreaming(fetch('src/wasm/donut.wasm'), {
   memory = results.instance.exports.memory;
   const donutAPI = new DonutApi(results);
   const donut = new Donut(donutAPI);
-  const rotationController = new RotationController(donut);
-  const lockedRotationController = new LockedRotationController(donut);
-
-  new Toolbox(donut, rotationController, lockedRotationController);
+  new MouseRotationController(donut)
+  new LockedRotationController(donut)
+  new Toolbox(donut);
 });
