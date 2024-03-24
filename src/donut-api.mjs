@@ -14,7 +14,6 @@ export class DonutApi {
     const frame = new TextDecoder("utf8").decode(bytes.slice(0, stringLength));
 
     this.exports.wasmfree(pointer);
-    console.log(frame.length);
 
     const regexp = new RegExp(`.{1,${rows}}`, 'g');
     return frame.match(regexp).join('\n');

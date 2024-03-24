@@ -92,6 +92,7 @@ char* render_frame(float A, float B, float C, float screen_width, float screen_h
       }
     }
   }
+  free(zbuffer);
 
   return output;
 }
