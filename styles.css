@@ -33,6 +33,8 @@ body {
 
 #animate,
 #lockcursor,
+#copy,
 #reset {
   grid-column: span 2;
 }
+

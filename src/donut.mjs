@@ -70,6 +70,10 @@ export class Donut {
     return this._distance;
   }
 
+  get lastFrame() {
+    return this.preElement.innerHTML;
+  }
+
   set color(color) {
     this._color = color;
     this.preElement.style.setProperty('color', color);

@@ -12,6 +12,7 @@ export class Toolbox {
   lockCursorButton = document.querySelector('#lockcursor');
   animateButton = document.querySelector('#animate');
   resetButton = document.querySelector('#reset');
+  copyButton = document.querySelector('#copy');
 
   constructor(donut) {
     this.donut = donut;
@@ -74,6 +75,10 @@ export class Toolbox {
     this.resetButton.addEventListener('click', () => {
       this.donut.setDefaultState();
       this.initView();
+    });
+
+    this.copyButton.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(this.donut.lastFrame);
     });
   }
 
