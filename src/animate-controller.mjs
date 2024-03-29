@@ -4,7 +4,7 @@ export class AnimateController {
   donut;
   display = document.querySelector('.display');
   xAxisStep = 0.04;
-  zAxisStep = 0.02;
+  yAxisStep = 0.02;
   currentIntervalRef;
   intervalRate = 10;
 
@@ -44,11 +44,6 @@ export class AnimateController {
   }
 
   updateShape() {
-    const [currentRotateX, currentRotateY, currentRotateZ] = this.donut.rotate;
-    this.donut.rotate = [
-      (currentRotateX + this.xAxisStep) % 6.28,
-      currentRotateY,
-      (currentRotateZ + this.zAxisStep) % 6.28,
-    ];
+    this.donut.rotate(this.xAxisStep, this.yAxisStep);
   }
 }

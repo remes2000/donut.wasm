@@ -33,12 +33,24 @@ export class Toolbox {
   }
 
   listenToDomEvents() {
+    this.rowsInput.addEventListener('input', ({ target: { value } }) => {
+      this.donut.rows = value;
+    });
+
+    this.colsInput.addEventListener('input', ({ target: { value } }) => {
+      this.donut.cols = value;
+    });
+
     this.fontColorInput.addEventListener('input', ({ target: { value } }) => {
       this.donut.color = value;
     });
 
     this.fontSizeInput.addEventListener('input', ({ target: { value } }) => {
       this.donut.fontSize = value;
+    });
+
+    this.distanceInput.addEventListener('input', ({ target: { value } }) => {
+      this.donut.distance = value;
     });
 
     this.thicknessInput.addEventListener('input', ({ target: { value } }) => {

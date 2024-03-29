@@ -62,6 +62,7 @@
     "chrono": "cpp",
     "compare": "cpp",
     "concepts": "cpp",
-    "algorithm": "cpp"
+    "algorithm": "cpp",
+    "stdio.h": "c"
   }
 }

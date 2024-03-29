@@ -38,11 +38,6 @@ export class LockedRotationController {
   }
 
   updatePosition = ({ movementX, movementY }) => {
-    const [currentRotateX, currentRotateY, currentRotateZ] = this.donut.rotate;
-    this.donut.rotate = [
-      (currentRotateX + movementY * this.rotationStep) % 6.28,
-      (currentRotateY + movementX * this.rotationStep) % 6.28,
-      currentRotateZ
-    ];
+    this.donut.rotate(movementY * this.rotationStep, movementX * this.rotationStep);
   }
 }

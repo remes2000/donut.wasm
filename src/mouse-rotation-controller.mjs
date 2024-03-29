@@ -48,12 +48,7 @@ export class MouseRotationController {
     }
     const [lockX, lockY] = this.lockPoint;
     const [dx, dy] = [clientX - lockX, clientY - lockY];
-    const [currentRotateX, currentRotateY, currentRotateZ] = this.donut.rotate;
-    this.donut.rotate = [
-      (currentRotateX + dy * this.rotationStep) % 6.28,
-      (currentRotateY + dx * this.rotationStep) % 6.28,
-      currentRotateZ
-    ];
+    this.donut.rotate(dy * this.rotationStep, dx * this.rotationStep);
     this.lockPoint = [clientX, clientY];
   }
 }
