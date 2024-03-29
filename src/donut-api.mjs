@@ -11,7 +11,7 @@ export class DonutApi {
     const accumulator = new Float32Array(this.memory.buffer, rotationAccumulatorPointer);
     rotationAccumulator.forEach((_, index) => accumulator[index] = rotationAccumulator[index]);
 
-    const pointer = this.exports.render_frame(rotationAccumulatorPointer, rows, cols, r1, r2, distance);
+    const pointer = this.exports.render_frame(rotationAccumulatorPointer, cols, rows, r1, r2, distance);
     this.exports.wasmfree(rotationAccumulatorPointer);
     
     const bytes = new Uint8Array(this.memory.buffer, pointer);
@@ -21,7 +21,7 @@ export class DonutApi {
 
     this.exports.wasmfree(pointer);
 
-    const regexp = new RegExp(`.{1,${rows}}`, 'g');
+    const regexp = new RegExp(`.{1,${cols}}`, 'g');
     return frame.match(regexp).join('\n');
   }
 

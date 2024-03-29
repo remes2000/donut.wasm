@@ -41,8 +41,10 @@ void rotate(float* rotationAccumulator, float xRotateAngle, float yRotateAngle, 
 
 EMSCRIPTEN_KEEPALIVE
 char* render_frame(float* rotationAccumulator, float screen_width, float screen_height, float R1, float R2, float distance) {
+  float aspect_ratio = screen_width / screen_height;
   float theta_spacing = 0.07;
   float phi_spacing = 0.02;
+  float d = 1.0f / tan(6.28f / 4.0f / 2.0f);
   float K1 = 30.0f;
 
   char* output = (char*) malloc(((int) screen_width * (int) screen_height + 1) * sizeof(char));
@@ -70,7 +72,8 @@ char* render_frame(float* rotationAccumulator, float screen_width, float screen_
       multiply(donutRotate, rotationAccumulator, partial, 3, 3, 3, 3);
       multiply(circle, partial, position, 1, 3, 3, 3);
 
-      float ooz = 1.0f/(position[2] + distance);
+      float z = position[2] + distance;
+      float ooz = 1.0f/z;
       int xp = (int) (screen_width/2 + K1 * ooz * position[0]);
       int yp = (int) (screen_height/2 - (K1/2) * ooz * position[1]);
       int o = xp + screen_width * yp;

@@ -21,8 +21,8 @@ export class Donut {
   }
 
   setDefaultState() {
-    this._rows = 80;
-    this._cols = 22;
+    this._rows = 22;
+    this._cols = 80;
     this._thickness = 1;
     this._size = 2;
     this._distance = 5;
