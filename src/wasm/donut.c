@@ -43,7 +43,7 @@ EMSCRIPTEN_KEEPALIVE
 char* render_frame(float* rotation_accumulator, float screen_width, float screen_height, float r1, float r2, float distance) {
   float theta_spacing = 0.07;
   float phi_spacing = 0.02;
-  float K1 = 30.0f;
+  float k1 = 30.0f;
 
   char* output = (char*) malloc(((int) screen_width * (int) screen_height + 1) * sizeof(char));
   float* zbuffer = (float*) malloc((int) screen_width * (int) screen_height * sizeof(float));
@@ -70,8 +70,8 @@ char* render_frame(float* rotation_accumulator, float screen_width, float screen
 
       float z = position[2] + distance;
       float ooz = 1.0f/z;
-      int xp = (int) (screen_width/2 + K1 * ooz * position[0]);
-      int yp = (int) (screen_height/2 - (K1/2) * ooz * position[1]);
+      int xp = (int) (screen_width/2 + k1 * ooz * position[0]);
+      int yp = (int) (screen_height/2 - (k1/2) * ooz * position[1]);
       int o = xp + screen_width * yp;
 
       float normal[3];
