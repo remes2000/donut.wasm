@@ -67,6 +67,11 @@ body {
     height: 100%;
     transform: translateX(100%);
     transition: .2s all ease-in;
+    padding: 10px 7px;
+
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+    width: auto;
   }
 
   .toolbox .toolbox-toggle {
@@ -79,5 +84,12 @@ body {
 
   .toolbox.opened {
     transform: translateX(0);
+  }
+
+  #animate,
+  #lockcursor,
+  #copy,
+  #reset {
+    grid-column: span 1;
   }
 }
