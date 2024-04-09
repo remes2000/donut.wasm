@@ -1,3 +1,5 @@
+import { FLOAT_SIZE_IN_BYTES } from "./consts.mjs";
+
 export class DonutApi {
   wasmResult;
 
@@ -6,43 +8,46 @@ export class DonutApi {
   }
 
   getFrame(rows, cols, r1, r2, rotationAccumulator, distance) {
-    const FLOAT_SIZE_IN_BYTES = 4;
-    const rotationAccumulatorPointer = this.exports.wasmallocate(rotationAccumulator.length * FLOAT_SIZE_IN_BYTES);
-    const accumulator = new Float32Array(this.memory.buffer, rotationAccumulatorPointer);
-    rotationAccumulator.forEach((_, index) => accumulator[index] = rotationAccumulator[index]);
+    const rotationAccumulatorPointer = this.arrayToFloatPointer(rotationAccumulator);
+    const resultPointer = this.exports.render_frame(rotationAccumulatorPointer, cols, rows, r1, r2, distance);
+    const frame = this.charPointerToString(resultPointer);
 
-    const pointer = this.exports.render_frame(rotationAccumulatorPointer, cols, rows, r1, r2, distance);
     this.exports.wasmfree(rotationAccumulatorPointer);
-    
-    const bytes = new Uint8Array(this.memory.buffer, pointer);
-    let stringLength = 0;
-    while (bytes[stringLength] != 0) stringLength++;
-    const frame = new TextDecoder("utf8").decode(bytes.slice(0, stringLength));
+    this.exports.wasmfree(resultPointer);
 
-    this.exports.wasmfree(pointer);
-
-    const regexp = new RegExp(`.{1,${cols}}`, 'g');
-    return frame.match(regexp).join('\n');
+    return frame.match(new RegExp(`.{1,${cols}}`, 'g')).join('\n');
   }
 
   rotateMatrix(matrix, rotateX, rotateY) {
-    const result = [];
-    const FLOAT_SIZE_IN_BYTES = 4;
-    const matrixPointer = this.exports.wasmallocate(matrix.length * FLOAT_SIZE_IN_BYTES);
-    const matrixFloatArray = new Float32Array(this.memory.buffer, matrixPointer);
+    const matrixPointer = this.arrayToFloatPointer(matrix);
     const resultPointer = this.exports.wasmallocate(matrix.length * FLOAT_SIZE_IN_BYTES);
-    const resultFloatArray = new Float32Array(this.memory.buffer, resultPointer);
-    matrix.forEach((_, index) => matrixFloatArray[index] = matrix[index]);
     this.exports.rotate(matrixPointer, rotateX, rotateY, resultPointer);
 
-    for (let i = 0; i < 9; i++) {
-      result.push(resultFloatArray[i]);
-    }
+    const result = this.floatPointerToArray(resultPointer, matrix.length);
 
     this.exports.wasmfree(matrixPointer);
     this.exports.wasmfree(resultPointer);
 
     return result;
+  }
+
+  arrayToFloatPointer(array) {
+    const pointer = this.exports.wasmallocate(array.length * FLOAT_SIZE_IN_BYTES);
+    const floatArray = new Float32Array(this.memory.buffer, pointer);
+    array.forEach((item, index) => floatArray[index] = item);
+    return pointer;
+  }
+
+  floatPointerToArray(pointer, length) {
+    const floatArray = new Float32Array(this.memory.buffer, pointer);
+    return Array.from({ length }).map((_, index) => floatArray[index]);
+  }
+
+  charPointerToString(pointer) {
+    const bytes = new Uint8Array(this.memory.buffer, pointer);
+    let stringLength = 0;
+    while (bytes[stringLength] !== 0) stringLength++;
+    return new TextDecoder("utf8").decode(bytes.slice(0, stringLength));
   }
 
   get memory() {

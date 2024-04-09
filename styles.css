@@ -1,10 +1,21 @@
+:root {
+  --toolbox-width: 320px;
+}
+
 body {
   padding: 0;
   margin: 0;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 
 .display {
-  width: 100%;
+  width: calc(100% - var(--toolbox-width));
   height: 100%;
   display: flex;
   justify-content: center;
@@ -16,19 +27,25 @@ body {
 }
 
 .toolbox {
-  position: absolute;
-  top: 30px;
-  right: 30px;
   display: grid;
+  width: var(--toolbox-width);
+  box-sizing: border-box;
   grid-template-columns: min-content 1fr;
+  grid-auto-rows: min-content;
   column-gap: 25px;
   row-gap: 10px;
+  padding: 10px 20px;
   background-color: black;
   color: white;
+  border-left: 1px dashed white;
 }
 
 .toolbox label {
   white-space: nowrap;
+}
+
+.toolbox .toolbox-toggle {
+  display: none;
 }
 
 #animate,
@@ -38,3 +55,29 @@ body {
   grid-column: span 2;
 }
 
+@media screen and (max-width: 900px) {
+  .display {
+    width: 100%;
+  }
+
+  .toolbox {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    transform: translateX(100%);
+    transition: .2s all ease-in;
+  }
+
+  .toolbox .toolbox-toggle {
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: 0;
+    transform: translateX(calc(-100% - 15px));
+  }
+
+  .toolbox.opened {
+    transform: translateX(0);
+  }
+}

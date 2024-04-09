@@ -5,7 +5,7 @@ import { MouseRotationController } from './mouse-rotation-controller.mjs';
 import { LockedRotationController } from './locked-rotation-controller.mjs';
 import { AnimateController } from './animate-controller.mjs';
 
-let memory = new WebAssembly.Memory({
+const memory = new WebAssembly.Memory({
   initial: 256,
   maximum: 512
 });
@@ -16,7 +16,6 @@ WebAssembly.instantiateStreaming(fetch('src/wasm/donut.wasm'), {
     emscripten_resize_heap: memory.grow,
   },
 }).then((results) => {
-  memory = results.instance.exports.memory;
   const donutAPI = new DonutApi(results);
   const donut = new Donut(donutAPI);
   new MouseRotationController(donut)
