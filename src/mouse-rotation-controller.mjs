@@ -48,14 +48,17 @@ export class MouseRotationController {
   }
 
   lock = (event) => {
+    event.preventDefault();
     this.lockPoint = getCoordinates(event);
   }
 
-  release = () => {
+  release = (event) => {
+    event.preventDefault();
     this.lockPoint = null;
   }
 
   rotate = (event) => {
+    event.preventDefault();
     if (!this.lockPoint) {
       return;
     }
