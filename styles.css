@@ -5,13 +5,14 @@
 body {
   padding: 0;
   margin: 0;
-  overflow: hidden;
 }
 
 .container {
   display: flex;
   width: 100%;
   height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .display {
@@ -27,17 +28,23 @@ body {
 }
 
 .toolbox {
-  display: grid;
   width: var(--toolbox-width);
   box-sizing: border-box;
+  background-color: black;
+  color: white;
+  border-left: 1px dashed white;
+}
+
+.toolbox .scrollable {
+  display: grid;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
   grid-template-columns: min-content 1fr;
   grid-auto-rows: min-content;
   column-gap: 25px;
   row-gap: 10px;
   padding: 10px 20px;
-  background-color: black;
-  color: white;
-  border-left: 1px dashed white;
 }
 
 .toolbox label {
@@ -65,13 +72,15 @@ body {
     top: 0;
     right: 0;
     height: 100%;
+    width: auto;
     transform: translateX(100%);
     transition: .2s all ease-in;
-    padding: 10px 7px;
+  }
 
+  .toolbox .scrollable {
     grid-template-columns: 1fr;
     row-gap: 10px;
-    width: auto;
+    padding: 10px 7px;
   }
 
   .toolbox .toolbox-toggle {
